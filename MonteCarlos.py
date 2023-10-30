@@ -17,7 +17,8 @@ class Node():
 
         self.visits = 0 #amount of visits to node when created is 0
         self.score = 0 #amount of score is 0 when node is created
-        self.children = {} #start with no children
+        self.children = {}
+        
 
 class Tree():
     def chooseMove(self, initial_state):
@@ -33,24 +34,59 @@ class Tree():
 
             #update scores and visits for nodes along path
             self.backProp(node, score)
+
         return self.chooseBestMove(self.root, 0)
 
     def selectExpansion(self, node):
-        pass
+        while not node.isTerminal:
+            if node.fullyExpanded:
+                node = self.chooseBestMove(node, 2)
+            else:
+                return self.expand(node)
+            
+        return node
+
+    def expand(self, node):
+        legalMoves = list(node.board.legal_moves)
+        for move in legalMoves:
+            tempBoard = deepcopy(node.board)
+            tempBoard = tempBoard.push(move)
+            if tempBoard not in node.children:
+                new_node = Node(tempBoard, node)
+                node.children[tempBoard.fen()] = new_node
+
+                if len(legalMoves) == len(node.children):
+                    node.fullyExpanded = True
+
+                return new_node
+        print('Error: no node found in expand function')
 
     def simulation(self, board):
-        pass
+        while not board.is_win():
+            
 
     def backProp(self, node, score):
         pass
 
     def chooseBestMove(self, node, explorationConstant):
-        pass
+        highScore = -99999
+        bestMoves = []
 
 
+        for child in node.children.values():
+            if child.board.turn == True: current_player = 1
+            elif child.boad.turn == False: current_player = -1
 
-def MCTS():
-    pass
+            move_score = current_player*child.score/child.visits + explorationConstant * math.sqrt(math.log(node.visits/child.visits))
+
+            if move_score > highScore:
+                highScore = move_score
+                bestMoves = [child]
+            elif move_score == highScore:
+                bestMoves.append(child)
+
+            return random.choice(bestMoves)
+            
 
 
 
@@ -61,6 +97,12 @@ if __name__ == '__main__':
     board1.push_san("d4")
     board1.push_san("d5")
 
+    root = Node(board1)
+    tree = Tree()
+
+    tree.chooseBestMove(tree.root, 0)
+
+    '''
     #get legal moves 
     legalMoves = list(board.legal_moves)
     
@@ -68,3 +110,4 @@ if __name__ == '__main__':
     board1.push(legalMoves[0])
     print(board1.outcome())
     MCTS()
+    '''
