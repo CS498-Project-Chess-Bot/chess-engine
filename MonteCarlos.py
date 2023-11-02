@@ -63,7 +63,7 @@ class Tree():
 
     def simulation(self, board):
         while not board.is_win():
-            
+            pass
 
     def backProp(self, node, score):
         pass
