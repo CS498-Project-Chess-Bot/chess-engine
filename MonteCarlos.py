@@ -26,17 +26,19 @@ class Tree():
         self.root = Node(board)
     def chooseMove(self):
         #limit search by iterations
-        for iteration in range(50):
+        for iteration in range(1000):
             #choose a node
             node = self.selectExpansion(self.root)
 
             #score the node by 
-            score = self.simulation(node.board)
+            score = self.simulation(deepcopy(node.board))
 
             #update scores and visits for nodes along path
             self.backProp(node, score)
         
-        return self.chooseBestMove(self.root, 0)
+        bestMove = self.chooseBestMove(self.root, 0).board
+        self.root = self.root.children[bestMove.fen()]
+        return bestMove 
 
     def selectExpansion(self, node):
         while node.board.outcome() == None:
@@ -62,7 +64,6 @@ class Tree():
         print('Error: no node found in expand function')
 
     def simulation(self, board):
-        board = deepcopy(board)
         while board.outcome() == None:
             legalMoves = list(board.legal_moves)
             board.push(random.choice(legalMoves))
@@ -117,8 +118,8 @@ if __name__ == '__main__':
                 else: print('White Won')
             else: print('Draw')
             break
-        board1 = tree.chooseMove().board
-        tree = Tree(board1)
+        board1 = tree.chooseMove()
+        
         os.system('cls')
         print(board1)
     
