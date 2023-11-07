@@ -2,6 +2,7 @@ import chess
 import math
 import random
 from copy import deepcopy
+import os
 
 class Node():
     def __init__(self, board, parent=None):
@@ -21,11 +22,11 @@ class Node():
         
 
 class Tree():
-    def chooseMove(self, initial_state):
-        self.root = Node(initial_state)
-
+    def __init__(self, board):
+        self.root = Node(board)
+    def chooseMove(self):
         #limit search by iterations
-        for iteration in range(1000):
+        for iteration in range(50):
             #choose a node
             node = self.selectExpansion(self.root)
 
@@ -34,24 +35,23 @@ class Tree():
 
             #update scores and visits for nodes along path
             self.backProp(node, score)
-
+        
         return self.chooseBestMove(self.root, 0)
 
     def selectExpansion(self, node):
-        while not node.isTerminal:
+        while node.board.outcome() == None:
             if node.fullyExpanded:
-                node = self.chooseBestMove(node, 2)
+                node = self.chooseBestMove(node, 2) 
             else:
                 return self.expand(node)
-            
         return node
 
     def expand(self, node):
         legalMoves = list(node.board.legal_moves)
         for move in legalMoves:
             tempBoard = deepcopy(node.board)
-            tempBoard = tempBoard.push(move)
-            if tempBoard not in node.children:
+            tempBoard.push(move)
+            if tempBoard.fen() not in node.children.keys():
                 new_node = Node(tempBoard, node)
                 node.children[tempBoard.fen()] = new_node
 
@@ -62,12 +62,26 @@ class Tree():
         print('Error: no node found in expand function')
 
     def simulation(self, board):
-        while not board.is_win():
-            
+        board = deepcopy(board)
+        while board.outcome() == None:
+            legalMoves = list(board.legal_moves)
+            board.push(random.choice(legalMoves))
+        
+        if board.is_checkmate():
+            if board.turn:
+                return -1
+            else:
+                return 1
+        else: return 0
+
+        
 
     def backProp(self, node, score):
-        pass
-
+        while node is not None:
+            node.visits += 1
+            node.score += score
+            node = node.parent
+    
     def chooseBestMove(self, node, explorationConstant):
         highScore = -99999
         bestMoves = []
@@ -75,8 +89,7 @@ class Tree():
 
         for child in node.children.values():
             if child.board.turn == True: current_player = 1
-            elif child.boad.turn == False: current_player = -1
-
+            elif child.board.turn == False: current_player = -1
             move_score = current_player*child.score/child.visits + explorationConstant * math.sqrt(math.log(node.visits/child.visits))
 
             if move_score > highScore:
@@ -84,8 +97,8 @@ class Tree():
                 bestMoves = [child]
             elif move_score == highScore:
                 bestMoves.append(child)
-
-            return random.choice(bestMoves)
+            
+        return random.choice(bestMoves)
             
 
 
@@ -94,20 +107,20 @@ if __name__ == '__main__':
     #create board
     board = chess.Board()
     board1 = deepcopy(board)
-    board1.push_san("d4")
-    board1.push_san("d5")
 
-    root = Node(board1)
-    tree = Tree()
-
-    tree.chooseBestMove(tree.root, 0)
-
-    '''
-    #get legal moves 
-    legalMoves = list(board.legal_moves)
+    tree = Tree(board1)
     
-    #make a legal move
-    board1.push(legalMoves[0])
-    print(board1.outcome())
-    MCTS()
-    '''
+    while True:
+        if board1.outcome() != None:
+            if board.is_checkmate():
+                if board1.turn: print('Black Won')
+                else: print('White Won')
+            else: print('Draw')
+            break
+        board1 = tree.chooseMove().board
+        tree = Tree(board1)
+        os.system('cls')
+        print(board1)
+    
+    
+    
