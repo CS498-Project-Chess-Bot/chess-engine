@@ -116,7 +116,7 @@ if __name__ == '__main__':
     elif diff == 2: difficulty = 800
     else: difficulty = 600
 
-    tree = Tree(board1, Difficulty)
+    tree = Tree(board1, difficulty)
     
     while True:
         if board1.outcome() != None:
