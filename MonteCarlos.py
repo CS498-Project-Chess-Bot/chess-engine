@@ -4,6 +4,7 @@ import random
 from copy import deepcopy
 import os
 
+
 class Node():
     def __init__(self, board, parent=None):
         self.board = board
@@ -22,11 +23,12 @@ class Node():
         
 
 class Tree():
-    def __init__(self, board):
+    def __init__(self, board, difficulty):
         self.root = Node(board)
+        self.difficulty = difficulty
     def chooseMove(self):
         #limit search by iterations
-        for iteration in range(1000):
+        for iteration in range(self.difficulty):
             #choose a node
             node = self.selectExpansion(self.root)
 
@@ -109,7 +111,12 @@ if __name__ == '__main__':
     board = chess.Board()
     board1 = deepcopy(board)
 
-    tree = Tree(board1)
+    diff = input("What difficulty would you like? (1 = Easy, 2 = Medium, 3 = Hard)")
+    if diff == 1: difficulty = 1000
+    elif diff == 2: difficulty = 800
+    else: difficulty = 600
+
+    tree = Tree(board1, Difficulty)
     
     while True:
         if board1.outcome() != None:
