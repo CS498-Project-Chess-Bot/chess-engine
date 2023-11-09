@@ -104,6 +104,15 @@ class Tree():
         return random.choice(bestMoves)
             
 
+def Move(FEN, diff=1):
+    board = chess.Board(FEN)
+    if diff == 1: difficulty = 10000
+    elif diff == 2: difficulty = 800
+    else: difficulty = 600
+
+    tree = Tree(board, difficulty)
+
+    return tree.chooseMove()
 
 
 if __name__ == '__main__':
