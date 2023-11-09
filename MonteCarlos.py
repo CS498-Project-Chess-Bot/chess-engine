@@ -43,15 +43,15 @@ class Tree():
         return bestMove 
 
     def selectExpansion(self, node):
-        while node.board.outcome() == None:
+        if node.board.outcome() == None:
             if node.fullyExpanded:
-                node = self.chooseBestMove(node, 2) 
+                node = self.chooseBestMove(node, 2) #make this select expansion and see what happens
             else:
                 return self.expand(node)
-        return node
+        else: return node
 
     def expand(self, node):
-        legalMoves = list(node.board.legal_moves)
+        legalMoves = random.shuffle(list(node.board.legal_moves))
         for move in legalMoves:
             tempBoard = deepcopy(node.board)
             tempBoard.push(move)
