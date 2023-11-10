@@ -43,7 +43,7 @@ class Tree():
         return bestMove 
 
     def selectExpansion(self, node):
-        if node.board.outcome() == None:
+        while node.board.outcome() == None:
             if node.fullyExpanded:
                 node = self.chooseBestMove(node, 2) #make this select expansion and see what happens
             else:
