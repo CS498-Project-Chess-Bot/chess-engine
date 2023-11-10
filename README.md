@@ -8,5 +8,13 @@ The Tree class is originally created and given a root node and difficulty(diffic
 
     The selectExpansion function called from chooseMove checks that the root node is not fullyExpanded. If neither of those things are true it is sent to the expand function. If it is fullyExpanded, we go ahead and pick the move with the highest score from that node.
 
-    The expand function is going to get a list of the legal moves (in random order) 
+    The expand function is going to get a list of the legal moves (in random order) then check to see if that child has been made. If it has been made it checksanother move and if it hasn't been made it creates that node.
+
+    Next the simulation function simply makes moves until an outcome is reached and returns the outcome.
+
+    The backprop function updates the score and visits for the nodes that were explored.
+
+    ChooseBestMove calculates the score of each child node using a calculation with the exploration constant (that is 0 when you are checking for the best move at the end). If nodes have the same score it takes a random one.
+
+    The move function is what will normally be called from the chess gui and takes an argument of the board and difficulty. Then it creates the Tree and runs MCTS.
 

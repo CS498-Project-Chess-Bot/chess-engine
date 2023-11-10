@@ -66,12 +66,13 @@ class Tree():
         print('Error: no node found in expand function')
 
     def simulation(self, board):
-        while board.outcome() == None:
-            legalMoves = list(board.legal_moves)
-            board.push(random.choice(legalMoves))
+        tempBoard = deepcopy(board)
+        while tempBoard.outcome() == None:
+            legalMoves = list(tempBoard.legal_moves)
+            tempBoard.push(random.choice(legalMoves))
         
-        if board.is_checkmate():
-            if board.turn:
+        if tempBoard.is_checkmate():
+            if tempBoard.turn:
                 return -1
             else:
                 return 1
