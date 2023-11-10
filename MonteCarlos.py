@@ -45,10 +45,10 @@ class Tree():
     def selectExpansion(self, node):
         while node.board.outcome() == None:
             if node.fullyExpanded:
-                node = self.chooseBestMove(node, 2) 
+                node = self.chooseBestMove(node, 2) #make this select expansion and see what happens
             else:
                 return self.expand(node)
-        return node
+        else: return node
 
     def expand(self, node):
         legalMoves = list(node.board.legal_moves)
@@ -66,12 +66,13 @@ class Tree():
         print('Error: no node found in expand function')
 
     def simulation(self, board):
-        while board.outcome() == None:
-            legalMoves = list(board.legal_moves)
-            board.push(random.choice(legalMoves))
+        tempBoard = deepcopy(board)
+        while tempBoard.outcome() == None:
+            legalMoves = list(tempBoard.legal_moves)
+            tempBoard.push(random.choice(legalMoves))
         
-        if board.is_checkmate():
-            if board.turn:
+        if tempBoard.is_checkmate():
+            if tempBoard.turn:
                 return -1
             else:
                 return 1
@@ -104,6 +105,15 @@ class Tree():
         return random.choice(bestMoves)
             
 
+def Move(FEN, diff=1):
+    board = chess.Board(FEN)
+    if diff == 1: difficulty = 10000
+    elif diff == 2: difficulty = 800
+    else: difficulty = 600
+
+    tree = Tree(board, difficulty)
+
+    return tree.chooseMove()
 
 
 if __name__ == '__main__':
