@@ -1,3 +1,7 @@
+This code is a python code requires chess (pip install chess) in your python environment. To use you will run the Game.py file and give it a FEN state of a chess board (or use a given one) and then you will see the output of the position after the bot makes its move. If you choose to run the MonteCarlos.py file you will see a simulated chess game between two bots.
+
+
+
 This is the chess engine for our Machine learning chess bot
 
 The Node class initiates a Node in the tree with a board state, parent (None if it is the root node), a variable for whether the game has ended, a variable for whether it has been fully expanded (initially set to true if the board is an end state and has a result), the times that node has been visited, the score of that node, and its children nodes.

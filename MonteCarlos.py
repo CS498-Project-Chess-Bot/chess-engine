@@ -51,7 +51,7 @@ class Tree():
         else: return node
 
     def expand(self, node):
-        legalMoves = random.shuffle(list(node.board.legal_moves))
+        legalMoves = list(node.board.legal_moves)
         for move in legalMoves:
             tempBoard = deepcopy(node.board)
             tempBoard.push(move)
