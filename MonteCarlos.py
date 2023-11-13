@@ -45,7 +45,7 @@ class Tree():
     def selectExpansion(self, node):
         while node.board.outcome() == None:
             if node.fullyExpanded:
-                node = self.chooseBestMove(node, 2) #make this select expansion and see what happens
+                node = self.selectExpansion(self.chooseBestMove(node, 2)) #make this select expansion and see what happens
             else:
                 return self.expand(node)
         else: return node
@@ -73,9 +73,9 @@ class Tree():
         
         if tempBoard.is_checkmate():
             if tempBoard.turn:
-                return -1
-            else:
                 return 1
+            else:
+                return -1
         else: return 0
 
         
@@ -122,7 +122,7 @@ if __name__ == '__main__':
     board1 = deepcopy(board)
 
     diff = input("What difficulty would you like? (1 = Easy, 2 = Medium, 3 = Hard)")
-    if diff == 1: difficulty = 1000
+    if diff == 1: difficulty = 10000
     elif diff == 2: difficulty = 800
     else: difficulty = 600
 
