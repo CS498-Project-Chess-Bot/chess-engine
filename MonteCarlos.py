@@ -7,9 +7,10 @@ import time
 
 
 class Node():
-    def __init__(self, board, parent=None):
+    def __init__(self, board, moveFromParent=None, parent=None):
         self.board = board
         self.parent = parent
+        self.moveFromParent = moveFromParent
 
         #check for end of game !!!COULD BE BUG
         if board.outcome() != None: self.end = True
@@ -44,9 +45,10 @@ class Tree():
             self.backProp(node, score)
             #print("--- %s for select backprop ---" % (time.time() - start_time_backprop))
 
-        bestMove = self.chooseBestMove(self.root, 0).board
-        self.root = self.root.children[bestMove.fen()]
-        return bestMove 
+        bestMove = self.chooseBestMove(self.root, 0)
+        #self.root = self.root.children[bestMove.fen()]
+        print(bestMove.board, bestMove.moveFromParent)
+        return bestMove.moveFromParent
 
     def selectExpansion(self, node):
         if node.board.outcome() == None:
@@ -60,7 +62,7 @@ class Tree():
         move = random.choice(node.childMovesNotExplored)
         tempBoard = deepcopy(node.board)
         tempBoard.push(move)
-        new_node = Node(tempBoard, node)
+        new_node = Node(tempBoard, move, node)
         node.children[tempBoard.fen()] = new_node
         node.childMovesNotExplored.remove(move)
 
