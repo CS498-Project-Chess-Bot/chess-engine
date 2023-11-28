@@ -47,7 +47,7 @@ class Tree():
 
         bestMove = self.chooseBestMove(self.root, 0)
         #self.root = self.root.children[bestMove.fen()]
-        print(bestMove.board, bestMove.moveFromParent)
+        #print(bestMove.board, bestMove.moveFromParent)
         return bestMove.moveFromParent
 
     def selectExpansion(self, node):
@@ -148,7 +148,6 @@ if __name__ == '__main__':
         board1 = tree.chooseMove()
         
         os.system('cls')
-        print(board1)
     
     
     
