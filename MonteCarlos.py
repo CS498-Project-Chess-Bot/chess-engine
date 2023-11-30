@@ -83,9 +83,9 @@ class Tree():
         
         if tempBoard.is_checkmate():
             if tempBoard.turn:
-                return 1
-            else:
                 return -1
+            else:
+                return 1
         else: return 0
 
         
